@@ -3,9 +3,12 @@ package dive.tech.projeto.exercicios.controller;
 import dive.tech.projeto.exercicios.entity.Animal;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Path("/animal")
 public class AnimalController {
@@ -39,10 +42,10 @@ public class AnimalController {
     public Response filtrarAnimais(@QueryParam("especie") String especie,
                                    @QueryParam("nome") String nome) {
         List<Animal> animais = List.of(
-                new Animal(1L, "Abu", "Macaco"),
-                new Animal(2L, "Bob", "Cachorro"),
-                new Animal(3L, "Marcel", "Macaco"),
-                new Animal(4L, "Sagua", "Gato"));
+                new Animal("Abu", "Macaco"),
+                new Animal("Bob", "Cachorro"),
+                new Animal("Marcel", "Macaco"),
+                new Animal("Sagua", "Gato"));
 
         List<Animal> filtrados = new ArrayList<>();
 
@@ -59,5 +62,23 @@ public class AnimalController {
             }
         }
         return Response.ok(filtrados).build();
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response cadastrarAnimal(Animal animal, @Context HttpHeaders headers) {
+        //validação feito em 2 etapas para não dar erro caso não tenha nada no cabeçalho de autorizacao
+        List<String> cabecalhoAutorizacao = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
+        if (cabecalhoAutorizacao == null || cabecalhoAutorizacao.isEmpty()) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        String codigoAutorizacao = cabecalhoAutorizacao.get(0).substring(7);
+        if (!codigoAutorizacao.equals("codigo123")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        int id = 1 + (int)(Math.random() * ((1000 - 1) + 1));
+        Animal animalCriado = new Animal((long) id, animal.getNome(), animal.getEspecie());
+        return Response.ok(animalCriado).build();
     }
 }
