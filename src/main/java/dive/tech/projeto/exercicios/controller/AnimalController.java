@@ -1,10 +1,11 @@
 package dive.tech.projeto.exercicios.controller;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import dive.tech.projeto.exercicios.entity.Animal;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/animal")
 public class AnimalController {
@@ -17,6 +18,7 @@ public class AnimalController {
 
     @GET
     @Path("/{id}")
+    @Produces("application/json")
     public Response buscaranimalPorId(@PathParam("id") Long id) {
         String animal = null;
         if (id == 1) {
@@ -29,5 +31,33 @@ public class AnimalController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         return Response.ok(animal).build();
+    }
+
+    @GET
+    @Path("/filtro")
+    @Produces("application/json")
+    public Response filtrarAnimais(@QueryParam("especie") String especie,
+                                   @QueryParam("nome") String nome) {
+        List<Animal> animais = List.of(
+                new Animal(1L, "Abu", "Macaco"),
+                new Animal(2L, "Bob", "Cachorro"),
+                new Animal(3L, "Marcel", "Macaco"),
+                new Animal(4L, "Sagua", "Gato"));
+
+        List<Animal> filtrados = new ArrayList<>();
+
+        if (especie == null && nome == null) {
+            return Response.ok(animais).build();
+        }
+
+        for (Animal animal : animais) {
+            if (especie != null && especie.equalsIgnoreCase(animal.getEspecie())) {
+                filtrados.add(animal);
+            }
+            if (nome != null && nome.equalsIgnoreCase(animal.getNome())) {
+                filtrados.add(animal);
+            }
+        }
+        return Response.ok(filtrados).build();
     }
 }

@@ -14,6 +14,12 @@ public class Animal implements Serializable {
         return id;
     }
 
+    public Animal(Long id, String nome, String especie) {
+        this.id = id;
+        this.nome = nome;
+        this.especie = especie;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
