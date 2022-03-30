@@ -2,6 +2,7 @@ package dive.tech.projeto.exercicios.controller;
 
 import dive.tech.projeto.exercicios.entity.Animal;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -42,10 +43,10 @@ public class AnimalController {
     public Response filtrarAnimais(@QueryParam("especie") String especie,
                                    @QueryParam("nome") String nome) {
         List<Animal> animais = List.of(
-                new Animal("Abu", "Macaco"),
-                new Animal("Bob", "Cachorro"),
-                new Animal("Marcel", "Macaco"),
-                new Animal("Sagua", "Gato"));
+                new Animal(1L, "Abu", "Macaco"),
+                new Animal(2L, "Bob", "Cachorro"),
+                new Animal(3L, "Marcel", "Macaco"),
+                new Animal(4L, "Sagua", "Gato"));
 
         List<Animal> filtrados = new ArrayList<>();
 
@@ -80,5 +81,29 @@ public class AnimalController {
         int id = 1 + (int)(Math.random() * ((1000 - 1) + 1));
         Animal animalCriado = new Animal((long) id, animal.getNome(), animal.getEspecie());
         return Response.ok(animalCriado).build();
+    }
+
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response atualizarAnimal(@Valid Animal animal) {
+        List<Animal> animais = List.of(
+                new Animal(1L, "Abu", "Macaco"),
+                new Animal(2L, "Bob", "Cachorro"),
+                new Animal(3L, "Marcel", "Macaco"),
+                new Animal(4L, "Sagua", "Gato"));
+
+        Long id = animal.getId();
+        Animal animalEscolhido = null;
+        for (Animal animalAtual : animais) {
+            if (animalAtual.getId().equals(id)) {
+                animalEscolhido = animalAtual;
+            }
+        }
+        if (animalEscolhido == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(animal).build();
     }
 }
