@@ -84,4 +84,13 @@ public class CursoDao {
         }
         return cursos;
     }
+
+    public Curso salvarCurso(Curso curso) {
+        Curso cursoCriado = new Curso(Math.toIntExact(curso.getId()));
+        for (int j = 1; j < 4; j++) {
+            Disciplina disciplina = new Disciplina(cursoCriado.getNome(), j);
+            cursoCriado.getDisciplinas().add(disciplina);
+        }
+        return cursoCriado;
+    }
 }

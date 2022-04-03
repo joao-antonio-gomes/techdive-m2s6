@@ -19,9 +19,18 @@ public class Curso implements Serializable {
 
     private List<Disciplina> disciplinas = new ArrayList<>();
 
+    public Curso() {
+    }
+
     public Curso(int i) {
         this.id = (long) i;
         this.nome = "Curso " + i;
+    }
+
+    public Curso(int i, List<Disciplina> disciplinas) {
+        this.id = (long) i;
+        this.nome = "Curso " + i;
+        this.disciplinas = disciplinas;
     }
 
     public Long getId() {
