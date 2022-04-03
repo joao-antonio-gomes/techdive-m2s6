@@ -53,4 +53,16 @@ public class CursoController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces("application/json")
+    public Response delete(@PathParam("id") int id) {
+        try {
+            List<Curso> cursosRestantes = this.cursoDao.delete(id);
+            return Response.ok(cursosRestantes).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 }

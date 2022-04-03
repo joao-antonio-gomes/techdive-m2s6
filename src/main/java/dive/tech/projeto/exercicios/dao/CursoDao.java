@@ -113,4 +113,14 @@ public class CursoDao {
         cursoAtualizado.setNome(curso.getNome());
         return cursoAtualizado;
     }
+
+    public List<Curso> delete(int id) {
+        List<Curso> cursos = this.obterCursos();
+        Curso curso = cursos.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (curso == null) {
+            throw new NoSuchElementException("Curso não encontrado");
+        }
+        cursos.remove(curso);
+        return cursos;
+    }
 }
