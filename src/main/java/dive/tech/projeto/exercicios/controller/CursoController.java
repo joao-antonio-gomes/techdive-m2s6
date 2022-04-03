@@ -65,4 +65,15 @@ public class CursoController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+    @GET
+    @Produces("application/json")
+    public Response findByName(@QueryParam("nome") String nome) {
+        try {
+            Curso curso = this.cursoDao.findByName(nome);
+            return Response.ok(curso).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 }

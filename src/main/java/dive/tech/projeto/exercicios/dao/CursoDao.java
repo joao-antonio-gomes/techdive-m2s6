@@ -123,4 +123,13 @@ public class CursoDao {
         cursos.remove(curso);
         return cursos;
     }
+
+    public Curso findByName(String nome) {
+        List<Curso> cursos = this.obterCursos();
+        Curso curso = cursos.stream().filter(c -> c.getNome().equalsIgnoreCase(nome)).findFirst().orElse(null);
+        if (curso == null) {
+            throw new NoSuchElementException("Curso não encontrado");
+        }
+        return curso;
+    }
 }
