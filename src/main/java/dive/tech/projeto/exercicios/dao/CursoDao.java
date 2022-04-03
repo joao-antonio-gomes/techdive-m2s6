@@ -5,6 +5,7 @@ import dive.tech.projeto.exercicios.entity.Disciplina;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CursoDao {
 
@@ -92,5 +93,14 @@ public class CursoDao {
             cursoCriado.getDisciplinas().add(disciplina);
         }
         return cursoCriado;
+    }
+
+    public Curso listById(int id) {
+        List<Curso> cursos = this.obterCursos();
+        Curso curso = cursos.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (curso == null) {
+            throw new NoSuchElementException("Curso não encontrado");
+        }
+        return curso;
     }
 }

@@ -4,12 +4,10 @@ import dive.tech.projeto.exercicios.dao.CursoDao;
 import dive.tech.projeto.exercicios.entity.Curso;
 import dive.tech.projeto.exercicios.entity.Disciplina;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Path("/curso")
 public class CursoController {
@@ -30,5 +28,17 @@ public class CursoController {
     public Response salvarCurso(Curso curso) {
         Curso cursoCriado = this.cursoDao.salvarCurso(curso);
         return Response.status(Response.Status.CREATED).entity(cursoCriado).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces("application/json")
+    public Response listById(@PathParam("id") int id) {
+        try {
+            Curso curso = this.cursoDao.listById(id);
+            return Response.ok(curso).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }
