@@ -25,7 +25,10 @@ public class CursoController {
 
     @POST
     @Produces("application/json")
-    public Response salvarCurso(Curso curso) {
+    public Response salvarCurso(Curso curso, @HeaderParam("Authorization") String token) {
+        if (!"senha123".equals(token)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         Curso cursoCriado = this.cursoDao.salvarCurso(curso);
         return Response.status(Response.Status.CREATED).entity(cursoCriado).build();
     }
