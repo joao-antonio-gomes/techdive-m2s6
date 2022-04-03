@@ -41,4 +41,16 @@ public class CursoController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response update(Curso curso) {
+        try {
+            Curso cursoAtualizado = this.cursoDao.update(curso);
+            return Response.ok(cursoAtualizado).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 }
